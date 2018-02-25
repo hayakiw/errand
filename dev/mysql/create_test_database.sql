@@ -1,3 +1,3 @@
-GRANT ALL PRIVILEGES ON `wanter_test`.* TO 'wanter_test'@'%' IDENTIFIED BY 'wanter_test';
-CREATE DATABASE `wanter_test`;
+GRANT ALL PRIVILEGES ON `errand_test`.* TO 'errand_test'@'%' IDENTIFIED BY 'errand_test';
+CREATE DATABASE `errand_test`;
 FLUSH PRIVILEGES;
