@@ -8,42 +8,30 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class Order extends Model
+class Present extends Model
 {
     use SoftDeletes;
 
     const ORDER_STATUS_NEW = 'new';
     const ORDER_STATUS_OK = 'ok';
     const ORDER_STATUS_NG = 'ng';
-    const ORDER_STATUS_PAID = 'paid';
-    const ORDER_STATUS_ENDED = 'ended';
+    const ORDER_STATUS_SUCCESS = 'success';
+    const ORDER_STATUS_FAIL = 'fail';
 
     protected static $status = [
-        self::ORDER_STATUS_NEW => '依頼中',
+        self::ORDER_STATUS_NEW => '申請中',
         self::ORDER_STATUS_OK => '成立',
         self::ORDER_STATUS_NG => '不成立',
-        self::ORDER_STATUS_PAID => '申請中',
-        self::ORDER_STATUS_ENDED => '終了',
+        self::ORDER_STATUS_SUCCESS => '完了',
+        self::ORDER_STATUS_FAIL => '失敗',
     ];
 
     protected $fillable = [
-        'user_id', 'item_id',
-        'title', 'hours', 'price',
-        'prefer_at', 'prefer_at2', 'prefer_at3',
-        'work_at',
-        'status', 'comment', 'staff_comment', 'ordered_token'
+            'user_id', 'request_id',
+            'note', 'estimate_fee', 'fee_type',
+            'estimate_at', 'status',
+            'ordered_token',
     ];
-
-    protected static $meetingTypes = [
-        '対面',
-        '電話',
-        'メッセージ',
-    ];
-
-    public static function getMeetingTypes()
-    {
-        return static::$meetingTypes;
-    }
 
     public function getStatus()
     {
@@ -55,8 +43,8 @@ class Order extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function item()
+    public function request()
     {
-        return $this->belongsTo('App\Item');
+        return $this->belongsTo('App\Request');
     }
 }

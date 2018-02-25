@@ -8,10 +8,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class Pay extends Model
+class RequestPay extends Model
 {
     protected $fillable = [
-        'user_id', 'order_id',
+        'user_id', 'request_id',
         'token', 'amount', 'credit_id',
         'status', 'error_message'
     ];
@@ -30,6 +30,6 @@ class Pay extends Model
 
     public function order()
     {
-        return $this->belongsTo('App\Order');
+        return $this->belongsTo('App\Request');
     }
 }

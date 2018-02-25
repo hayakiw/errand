@@ -26,6 +26,8 @@ class User extends Authenticatable
     protected $fillable = [
         'email', 'password',
         'last_name', 'first_name',
+        'zip_code', 'prefecture', 'city',
+        'address','building','tel',
         'confirmation_token', 'confirmation_sent_at',
         'canceled_reason', 'canceled_other_reason', 'canceled_at',
     ];
@@ -46,9 +48,19 @@ class User extends Authenticatable
         'その他',
     ];
 
-    public function user()
+    public function requests()
     {
-        return $this->belongsTo('App\User');
+        return $this->hasMany('App\Request');
+    }
+
+    public function RequestDisplayOptions()
+    {
+        return $this->hasMany('App\RequestDisplayOption');
+    }
+
+    public function presents()
+    {
+        return $this->hasMany('App\Present');
     }
 
     public static function getCanceledReasons()
