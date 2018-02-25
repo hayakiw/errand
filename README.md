@@ -1,11 +1,11 @@
-# ask
+# errand
 
 ## Development
 
 ```
 $ git clone
 
-$ cd ask/dev
+$ cd errand/dev
 $ vagrant up
 ```
 
@@ -14,11 +14,11 @@ When the virtual machine is up successfully, access to http://localhost:8080.
 ### gulp
 
 ```
-ask-php$ gulp
+errand-php$ gulp
 ```
 
 ```
-ask-php$ gulp watch
+errand-php$ gulp watch
 ```
 
 ## SSHing to web server.
@@ -26,7 +26,7 @@ ask-php$ gulp watch
 ```
 local$ cd dev
 local$ vagrant ssh
-ask$ docker exec -it ask-php /bin/bash
+errand$ docker exec -it errand-php /bin/bash
 ```
 
 Source code is at /vagrant directory.
@@ -37,5 +37,5 @@ Source code is at /vagrant directory.
 ```
 local$ cd dev
 local$ vagrant ssh
-ask$ docker exec -it ask-mysql /bin/bash
+errand$ docker exec -it errand-mysql /bin/bash
 ```

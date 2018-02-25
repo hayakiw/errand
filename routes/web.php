@@ -16,23 +16,24 @@ Route::get('/', [
     'uses' => 'RootController@index',
 ]);
 
-// サービス一覧（カテゴリ、都道府県、タグ別に絞込み可）
-Route::get('items', [
-    'as' => 'item.index',
-    'uses' => 'ItemController@index',
+// 依頼一覧（カテゴリ、都道府県別に絞込み可）
+Route::get('requests', [
+    'as' => 'request.index',
+    'uses' => 'RequestController@index',
 ]);
 
-// サービス詳細
-Route::get('item/{item}', [
-    'as' => 'item.show',
-    'uses' => 'ItemController@show',
-])->where('item', '[0-9]+');
+// 依頼詳細
+Route::get('request/{request}', [
+    'as' => 'request.show',
+    'uses' => 'RequestController@show',
+])->where('request', '[0-9]+');
 
-// スタッフプロフィール
-Route::get('staff/{staff}', [
-    'as' => 'staff.show',
-    'uses' => 'StaffController@show',
-])->where('staff', '[0-9]+');
+// ユーザープロフィール
+Route::get('user/{user}', [
+    'as' => 'user.show',
+    'uses' => 'UserController@show',
+])->where('user', '[0-9]+');
+
 
 // お問い合わせ
 Route::resource(
@@ -40,7 +41,6 @@ Route::resource(
     'ContactController',
     ['only' => ['index','store']]
 );
-
 
 // 利用規約
 Route::get('agreement', [
@@ -103,21 +103,27 @@ Route::group(['middleware' => ['guest:web']], function () {
     ]);
 });
 
-Route::group(['middleware' => ['auth:web']], function () {
+Route::group(['middleware' => ['auth:web'], 'prefix' => 'my'], function () {
     Route::get('signout', [
         'as' => 'auth.signout',
         'uses' => 'AuthController@signout',
     ]);
 
-    Route::post('item/order', [
-        'as' => 'item.order',
-        'uses' => 'ItemController@order',
+    Route::post('request/pay', [
+        'as' => 'request.pay',
+        'uses' => 'RequestController@pay',
     ]);
 
-    Route::post('item/pay', [
-        'as' => 'item.pay',
-        'uses' => 'ItemController@pay',
+    // 買い物依頼
+    Route::resource('requests', 'RequestController');
+
+    Route::post('present/pay', [
+        'as' => 'present.pay',
+        'uses' => 'PresentController@pay',
     ]);
+
+    // 受注提示
+    Route::resource('presents', 'PresentController');
 
     // お知らせ
     Route::resource('orders', 'OrderController', ['only' => [
@@ -133,156 +139,50 @@ Route::group(['middleware' => ['auth:web']], function () {
         'as' => 'user.cancel',
         'uses' => 'UserController@cancel',
     ]);
+
+    // プロフィール編集
+    Route::get('user/edit', [
+        'as'   => 'user.edit',
+        'uses' => 'UserController@edit',
+    ]);
+
+    // プロフィール更新
+    Route::put('user/update', [
+        'as'   => 'user.update',
+        'uses' => 'UserController@update',
+    ]);
+
+    //ユーザー メール変更
+    Route::get('user/edit_email', [
+        'as' => 'user.edit_email',
+        'uses' => 'UserController@editEmail',
+    ]);
+
+    //ユーザー メール変更 メール送信
+    Route::put('user/request_email', [
+        'as' => 'user.request_email',
+        'uses' => 'UserController@requestEmail',
+    ]);
+
+    //ユーザー メール変更 更新
+    Route::get('user/update_email/{token?}', [
+        'as' => 'user.update_email',
+        'uses' => 'UserController@updateEmail',
+    ]);
+
+    //ユーザー パスワード変更
+    Route::get('user/edit_password', [
+        'as' => 'user.edit_password',
+        'uses' => 'UserController@editPassword',
+    ]);
+
+    //ユーザー パスワード変更 更新
+    Route::put('user/update_password', [
+        'as' => 'user.update_password',
+        'uses' => 'UserController@updatePassword',
+    ]);
 });
 
-
-Route::group(['namespace' => 'Staff', 'prefix' => 'staff'], function () {
-    Route::group(['middleware' => ['guest:staff']], function () {
-        Route::get('signin', [
-            'as' => 'staff.auth.signin_form',
-            'uses' => 'AuthController@signinForm',
-        ]);
-
-        Route::post('signin', [
-            'as' => 'staff.auth.signin',
-            'uses' => 'AuthController@signin',
-        ]);
-
-        // パスワード再設定
-        Route::get('reset_password/request', [
-            'as' => 'staff.reset_password.request_form',
-            'uses' => 'ResetPasswordController@requestForm',
-        ]);
-
-        Route::post('reset_password/request', [
-            'as' => 'staff.reset_password.request',
-            'uses' => 'ResetPasswordController@request',
-        ]);
-
-        Route::get('reset_password/reset/{token?}', [
-            'as' => 'staff.reset_password.reset_form',
-            'uses' => 'ResetPasswordController@resetForm',
-        ]);
-
-        Route::put('reset_password/reset', [
-            'as' => 'staff.reset_password.reset',
-            'uses' => 'ResetPasswordController@reset',
-        ]);
-
-        // 会員登録
-        Route::get('user/create', [
-            'as' => 'staff.user.create',
-            'uses' => 'UserController@create',
-        ]);
-
-        Route::post('user', [
-            'as' => 'staff.user.store',
-            'uses' => 'UserController@store',
-        ]);
-
-        Route::get('user/confirmation/{token?}', [
-            'as' => 'staff.user.confirmation',
-            'uses' => 'UserController@confirmation',
-        ]);
-    });
-
-    Route::group(['middleware' => ['auth:staff']], function () {
-
-        Route::get('signout', [
-            'as' => 'staff.auth.signout',
-            'uses' => 'AuthController@signout',
-        ]);
-
-        Route::get('/', [
-            'as' => 'staff.root.index',
-            'uses' => 'RootController@index',
-        ]);
-
-        Route::get('user/show', [
-            'as' => 'staff.user.show',
-            'uses' => 'UserController@show',
-        ]);
-
-        // プロフィール編集
-        Route::get('user/edit', [
-            'as'   => 'staff.user.edit',
-            'uses' => 'UserController@edit',
-        ]);
-
-        // プロフィール更新
-        Route::put('user/update', [
-            'as'   => 'staff.user.update',
-            'uses' => 'UserController@update',
-        ]);
-
-        //口座情報 編集
-        Route::get('user/edit_bank', [
-            'as' => 'staff.user.edit_bank',
-            'uses' => 'UserController@editBank',
-        ]);
-
-        //口座情報 更新
-        Route::put('user/update_bank', [
-            'as' => 'staff.user.update_bank',
-            'uses' => 'UserController@updateBank',
-        ]);
-
-
-        //ユーザー メール変更
-        Route::get('user/edit_email', [
-            'as' => 'staff.user.edit_email',
-            'uses' => 'UserController@editEmail',
-        ]);
-
-
-        //ユーザー メール変更 メール送信
-        Route::put('user/request_email', [
-            'as' => 'staff.user.request_email',
-            'uses' => 'UserController@requestEmail',
-        ]);
-
-        //ユーザー メール変更 更新
-        Route::get('user/update_email/{token?}', [
-            'as' => 'staff.user.update_email',
-            'uses' => 'UserController@updateEmail',
-        ]);
-
-
-        //ユーザー パスワード変更
-        Route::get('user/edit_password', [
-            'as' => 'staff.user.edit_password',
-            'uses' => 'UserController@editPassword',
-        ]);
-
-        //ユーザー パスワード変更 更新
-        Route::put('user/update_password', [
-            'as' => 'staff.user.update_password',
-            'uses' => 'UserController@updatePassword',
-        ]);
-
-        // マイページ
-        Route::get('my', [
-            'as' => 'staff.my.index',
-            'uses' => 'MyController@index',
-        ]);
-
-        // 認証の必要なItemページ（作成、編集、削除）
-        Route::resource('item', 'ItemController', [
-            'as' => 'staff',
-            'expect' => [
-                'show',
-            ],
-        ]);
-
-        // 認証の必要なItemページ（作成、編集、削除）
-        Route::resource('orders', 'OrderController', [
-            'as' => 'staff',
-            'only' => [
-                'show', 'index', 'update',
-            ]
-       ]);
-    });
-});
 
 Route::group(['namespace' => '_Admin', 'prefix' => '_admin'], function () {
 
@@ -336,16 +236,8 @@ Route::group(['namespace' => '_Admin', 'prefix' => '_admin'], function () {
         // 管理者管理
         Route::resource('admins', 'AdminController');
 
-        // スタッフ管理
-        Route::resource('staffs', 'StaffController');
-
-        // スタッフ管理
+        // ユーザー管理
         Route::resource('users', 'UserController');
-
-        Route::post('staffs/cancel/{staff?}', [
-            'as' => 'staffs.cancel',
-            'uses' => 'StaffController@cancel',
-        ])->where('staff', '[0-9]+');
 
     });
 
