@@ -73,6 +73,11 @@ class User extends Authenticatable
         return $this->last_name . ' ' . $this->first_name;
     }
 
+    public function getPrefecture()
+    {
+        return array_get(config('my.prefectures'), $this->prefecture);
+    }
+
     public function isActive()
     {
         return $this->getStatus() == 'アクティブ';

@@ -25,6 +25,7 @@ class UserController extends Controller
     {
         $userData = $request->only([
             'last_name', 'first_name', 'email', 'password',
+            'zip_code', 'prefecture', 'city', 'address', 'building', 'tel',
         ]);
 
         $userData['password'] = bcrypt($userData['password']);
@@ -60,7 +61,7 @@ class UserController extends Controller
                 // ログイン状態にしてリダイレクト
                 auth()->guard('web')->loginUsingId($user->getKey());
                 return redirect()
-                    ->route('item.index')
+                    ->route('root.index')
                     ->with(['info' => '会員登録が完了しました。'])
                 ;
             }
@@ -73,6 +74,32 @@ class UserController extends Controller
             ->withInput($request->all())
             ->withErrors($errors);
             ;
+    }
+
+    public function edit()
+    {
+        $user = auth()->user();
+        return view('user.edit', compact('user'));
+    }
+
+    public function update(UserRequest\UpdateRequest $request)
+    {
+        $user = auth()->user();
+
+        $userData = $request->only([
+            'last_name', 'first_name',
+            'zip_code', 'prefecture', 'city', 'address', 'building', 'tel',
+        ]);
+
+        if ($user->update($userData)) {
+            return redirect()
+                ->route('user.edit')
+                ->with(['info' => 'プロフィールを更新しました']);
+        }
+
+        return redirect()
+            ->back()
+            ->withErrors('プロフィールを更新できません');
     }
 
     public function editEmail()
@@ -178,7 +205,14 @@ class UserController extends Controller
 
     public function show()
     {
-        return view('user.show');
+        $user = auth()->user();
+        return view('user.show', compact('user'));
+    }
+
+    public function publicDisplay($id)
+    {
+        $user = User::findOrFail($id);
+        return view('user.public', compact('user'));
     }
 
     public function cancelForm()

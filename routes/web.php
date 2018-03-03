@@ -28,13 +28,6 @@ Route::get('request/{request}', [
     'uses' => 'RequestController@show',
 ])->where('request', '[0-9]+');
 
-// ユーザープロフィール
-Route::get('user/{user}', [
-    'as' => 'user.show',
-    'uses' => 'UserController@show',
-])->where('user', '[0-9]+');
-
-
 // お問い合わせ
 Route::resource(
     'contact',
@@ -103,84 +96,99 @@ Route::group(['middleware' => ['guest:web']], function () {
     ]);
 });
 
-Route::group(['middleware' => ['auth:web'], 'prefix' => 'my'], function () {
-    Route::get('signout', [
-        'as' => 'auth.signout',
-        'uses' => 'AuthController@signout',
-    ]);
+Route::group(['middleware' => ['auth:web']], function () {
+    Route::group(['prefix' => 'my'], function () {
+        Route::get('signout', [
+            'as' => 'auth.signout',
+            'uses' => 'AuthController@signout',
+        ]);
 
-    Route::post('request/pay', [
-        'as' => 'request.pay',
-        'uses' => 'RequestController@pay',
-    ]);
+        Route::post('request/pay', [
+            'as' => 'request.pay',
+            'uses' => 'RequestController@pay',
+        ]);
 
-    // 買い物依頼
-    Route::resource('requests', 'RequestController');
+        // 買い物依頼
+        Route::resource('requests', 'RequestController');
 
-    Route::post('present/pay', [
-        'as' => 'present.pay',
-        'uses' => 'PresentController@pay',
-    ]);
+        Route::post('present/pay', [
+            'as' => 'present.pay',
+            'uses' => 'PresentController@pay',
+        ]);
 
-    // 受注提示
-    Route::resource('presents', 'PresentController');
+        // 受注提示
+        Route::resource('presents', 'PresentController');
 
-    // お知らせ
-    Route::resource('orders', 'OrderController', ['only' => [
-        'show', 'index',
-    ]]);
+        // お知らせ
+        Route::resource('orders', 'OrderController', ['only' => [
+            'show', 'index',
+        ]]);
 
-    Route::get('user/cancel', [
-        'as' => 'user.cancel_form',
-        'uses' => 'UserController@cancelForm',
-    ]);
+        Route::get('user/cancel', [
+            'as' => 'user.cancel_form',
+            'uses' => 'UserController@cancelForm',
+        ]);
 
-    Route::delete('user/cancel', [
-        'as' => 'user.cancel',
-        'uses' => 'UserController@cancel',
-    ]);
+        Route::delete('user/cancel', [
+            'as' => 'user.cancel',
+            'uses' => 'UserController@cancel',
+        ]);
 
-    // プロフィール編集
-    Route::get('user/edit', [
-        'as'   => 'user.edit',
-        'uses' => 'UserController@edit',
-    ]);
+        // プロフィール編集
+        Route::get('user/show', [
+            'as'   => 'user.show',
+            'uses' => 'UserController@show',
+        ]);
 
-    // プロフィール更新
-    Route::put('user/update', [
-        'as'   => 'user.update',
-        'uses' => 'UserController@update',
-    ]);
+        // プロフィール編集
+        Route::get('user/edit', [
+            'as'   => 'user.edit',
+            'uses' => 'UserController@edit',
+        ]);
 
-    //ユーザー メール変更
-    Route::get('user/edit_email', [
-        'as' => 'user.edit_email',
-        'uses' => 'UserController@editEmail',
-    ]);
+        // プロフィール更新
+        Route::put('user/update', [
+            'as'   => 'user.update',
+            'uses' => 'UserController@update',
+        ]);
 
-    //ユーザー メール変更 メール送信
-    Route::put('user/request_email', [
-        'as' => 'user.request_email',
-        'uses' => 'UserController@requestEmail',
-    ]);
+        //ユーザー メール変更
+        Route::get('user/edit_email', [
+            'as' => 'user.edit_email',
+            'uses' => 'UserController@editEmail',
+        ]);
 
-    //ユーザー メール変更 更新
-    Route::get('user/update_email/{token?}', [
-        'as' => 'user.update_email',
-        'uses' => 'UserController@updateEmail',
-    ]);
+        //ユーザー メール変更 メール送信
+        Route::put('user/request_email', [
+            'as' => 'user.request_email',
+            'uses' => 'UserController@requestEmail',
+        ]);
 
-    //ユーザー パスワード変更
-    Route::get('user/edit_password', [
-        'as' => 'user.edit_password',
-        'uses' => 'UserController@editPassword',
-    ]);
+        //ユーザー メール変更 更新
+        Route::get('user/update_email/{token?}', [
+            'as' => 'user.update_email',
+            'uses' => 'UserController@updateEmail',
+        ]);
 
-    //ユーザー パスワード変更 更新
-    Route::put('user/update_password', [
-        'as' => 'user.update_password',
-        'uses' => 'UserController@updatePassword',
-    ]);
+        //ユーザー パスワード変更
+        Route::get('user/edit_password', [
+            'as' => 'user.edit_password',
+            'uses' => 'UserController@editPassword',
+        ]);
+
+        //ユーザー パスワード変更 更新
+        Route::put('user/update_password', [
+            'as' => 'user.update_password',
+            'uses' => 'UserController@updatePassword',
+        ]);
+
+    });
+
+    // ユーザープロフィール(公開)
+    Route::get('user/{user}', [
+        'as' => 'user.public',
+        'uses' => 'UserController@publicDisplay',
+    ])->where('user', '[0-9]+');
 });
 
 

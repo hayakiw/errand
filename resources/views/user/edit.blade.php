@@ -1,4 +1,4 @@
-@extends('staff.layout.master')
+@extends('layout.master')
 
 <?php
 
@@ -11,96 +11,105 @@
 ?>
 
 @section('content')
+  <h2><span>基本情報設定</span></h2>
+    <p class="lead">下記の項目を入力して「変更する」を押してください。</p>
 
-<section>
-  <div class="reset_box">
-    <div class="rs_inner">
-      <h2><span>基本情報設定</span></h2>
+    <div class="col-md-8">
 
-      {{ Form::model($user, ['route' => 'staff.user.update', 'method' => 'put']) }}
-      <div class="rs_inner2">
-        <dl>
-          <dt><span>必須</span>姓</dt>
-          <dd>
-            @if ($errors->has('last_name'))
-            <p class="err_message"><span>{{ $errors->first('last_name') }}</span></p>
-            @endif
-            <input type="text" name="last_name" placeholder="姓" value="{{ Request::old('last_name') ?: $user->last_name }}"></dd>
-        </dl>
-        <dl>
-          <dt><span>必須</span>名</dt>
-          <dd>
-            @if ($errors->has('first_name'))
-            <p class="err_message"><span>{{ $errors->first('first_name') }}</span></p>
-            @endif
-            <input type="text" name="first_name" placeholder="名" value="{{ Request::old('first_name') ?: $user->first_name }}"></dd>
-        </dl>
-        <dl>
-          <dt><span>必須</span>姓 フリガナ</dt>
-          <dd>
-            @if ($errors->has('last_name_kana'))
-            <p class="err_message"><span>{{ $errors->first('last_name_kana') }}</span></p>
-            @endif
-            <input type="text" name="last_name_kana" placeholder="名" value="{{ Request::old('last_name_kana') ?: $user->last_name_kana }}"></dd>
-        </dl>
-        <dl>
-          <dt><span>必須</span>名 フリガナ</dt>
-          <dd>
-            @if ($errors->has('first_name_kana'))
-            <p class="err_message"><span>{{ $errors->first('first_name_kana') }}</span></p>
-            @endif
-            <input type="text" name="first_name_kana" placeholder="名" value="{{ Request::old('first_name_kana') ?: $user->first_name_kana }}"></dd>
-        </dl>
-        <dl>
-          <dt><span>必須</span>郵便番号</dt>
-          <dd>
-            @if ($errors->has('zip'))
-            <p class="err_message"><span>{{ $errors->first('zip') }}</span></p>
-            @endif
-            <input type="text" name="zip" placeholder="半角数字で入力" value="{{ Request::old('zip') ?: $user->zip }}"></dd>
-        </dl>
-        <dl>
-          <dt><span>必須</span>都道府県名</dt>
-          <dd>
-            @if ($errors->has('prefecture'))
-            <p class="err_message"><span>{{ $errors->first('prefecture') }}</span></p>
-            @endif
-            <input type="text" name="prefecture" placeholder="都道府県名" value="{{ Request::old('prefecture') ?: $user->prefecture }}"></dd>
-        </dl>
-        <dl>
-          <dt><span>必須</span>市区町村、番地</dt>
-          <dd>
-            @if ($errors->has('address1'))
-            <p class="err_message"><span>{{ $errors->first('address1') }}</span></p>
-            @endif
-            <input type="text" name="address1" placeholder="市区町村、番地" value="{{ Request::old('address1') ?: $user->address1 }}"></dd>
-        </dl>
-        <dl>
-          <dt>ビル・マンション名</dt>
-          <dd>
-            @if ($errors->has('address2'))
-            <p class="err_message"><span>{{ $errors->first('address2') }}</span></p>
-            @endif
-            <input type="text" name="address2" placeholder="ビル・マンション名" value="{{ Request::old('address2') ?: $user->address2 }}"></dd>
-        </dl>
-        <dl>
-          <dt>電話番号</dt>
-          <dd>
-            @if ($errors->has('tel'))
-            <p class="err_message"><span>{{ $errors->first('tel') }}</span></p>
-            @endif
-            <input type="text" name="tel" placeholder="半角数字で入力" value="{{ Request::old('tel') ?: $user->tel }}"></dd>
-        </dl>
-
-        <dl>
-          <dt></dt>
-          <dd><button type="submit" id="btn_reset"><span>変更する</span></button></dd>
-        </dl>
+    {{ Form::model($user, ['route' => 'user.update', 'method' => 'put', 'class' => 'form-horizontal']) }}
+      <div class="form-group">
+        <label for="input_lastname" class="col-md-4 control-label">姓 <span class="text-danger">*</span></label>
+        <div class="col-md-8">
+          <input type="text" name="last_name" class="form-control" id="input_lastname" placeholder="姓" value="{{ old('last_name') ? old('last_name') : $user->last_name }}">
+          @if ($errors->has('last_name'))
+            <div class="text-danger">{{ $errors->first('last_name') }}</div>
+          @endif
+        </div>
       </div>
-      {{ Form::close() }}
 
+      <div class="form-group">
+        <label for="input_firstname" class="col-md-4 control-label">名 <span class="text-danger">*</span></label>
+        <div class="col-md-8">
+          <input type="text" name="first_name" class="form-control" id="input_firstname" placeholder="名" value="{{ old('first_name') ? old('first_name') : $user->first_name }}">
+          @if ($errors->has('first_name'))
+            <div class="text-danger">{{ $errors->first('first_name') }}</div>
+          @endif
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="input_zipcode" class="col-md-4 control-label">郵便番号 <span class="text-danger">*</span></label>
+        <div class="col-md-8">
+          <input type="text" name="zip_code" class="form-control" id="input_zipcode" placeholder="半角数字、ハイフン（-）なしで入力" value="{{ old('zip_code') ? old('zip_code') : $user->zip_code }}">
+          {{-- TODO: 住所自動入力 --}}
+          @if ($errors->has('zip_code'))
+            <div class="text-danger">{{ $errors->first('zip_code') }}</div>
+          @endif
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="input_prefecture" class="col-md-4 control-label">都道府県 <span class="text-danger">*</span></label>
+        <div class="col-md-8">
+          <select class="form-control" name="prefecture" id="input_prefecture">
+            <option value="">都道府県を選択</option>
+            @foreach (config('my.prefectures') as $key => $value)
+              <option value="{{ $key }}"{{ old('prefecture', $user->prefecture) == $key ? ' selected="selected"' : '' }}>{{ $value }}</option>
+            @endforeach
+          </select>
+          @if ($errors->has('prefecture'))
+            <div class="text-danger">{{ $errors->first('prefecture') }}</div>
+          @endif
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="input_city" class="col-md-4 control-label">市区町村 <span class="text-danger">*</span></label>
+        <div class="col-md-8">
+          <input type="text" name="city" class="form-control" id="input_city" placeholder="市区町村" value="{{ old('city') ? old('city') : $user->city }}">
+          @if ($errors->has('city'))
+            <div class="text-danger">{{ $errors->first('city') }}</div>
+          @endif
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="input_address" class="col-md-4 control-label">地名・番地 <span class="text-danger">*</span></label>
+        <div class="col-md-8">
+          <input type="text" name="address" class="form-control" id="input_address" placeholder="地名・番地" value="{{ old('address') ? old('address') : $user->address }}">
+          @if ($errors->has('address'))
+            <div class="text-danger">{{ $errors->first('address') }}</div>
+          @endif
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="input_building" class="col-md-4 control-label">建物名 <span class="">&nbsp;</span></label>
+        <div class="col-md-8">
+          <input type="text" name="building" class="form-control" id="input_building" placeholder="○○マンション3階" value="{{ old('building') ? old('building') : $user->building }}">
+          @if ($errors->has('building'))
+            <div class="text-danger">{{ $errors->first('building') }}</div>
+          @endif
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="input_tel" class="col-md-4 control-label">電話番号 <span class="text-danger">*</span></label>
+        <div class="col-md-8">
+          <input type="text" name="tel" class="form-control" id="input_tel" placeholder="半角数字、ハイフン（-）なしで入力" value="{{ old('tel') ? old('tel') : $user->tel }}">
+          @if ($errors->has('tel'))
+            <div class="text-danger">{{ $errors->first('tel') }}</div>
+          @endif
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-offset-4 col-md-8">
+          <button type="submit" name="submit" id="btn_regist" class="btn btn-default">変更する</button>
+        </div>
+      </div>
+
+      {{ Form::close() }}
     </div>
-  </div>
-</section>
 
 @endsection
