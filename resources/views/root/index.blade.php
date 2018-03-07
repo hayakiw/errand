@@ -20,7 +20,7 @@
     <!-- / .main-visual -->
     <section class="about">
       <div class="headline">
-        <h2>みんなのお父さんとは?</h2>
+        <h2>買い物代行とは?</h2>
       </div>
       <div class="container">
         <div class="row">
@@ -32,7 +32,7 @@
       <!-- /.container -->
     </section>
     <!-- / .about -->
-    <section class="service-list">
+    {{-- <section class="service-list">
       <div class="headline">
         <h2>サービス一覧</h2>
       </div>
@@ -56,102 +56,31 @@
       </div>
       <!-- / .container -->
     </section>
-    <!-- / .service-list -->
-    <!-- section staff-list  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+    <!-- / .service-list --> --}}
+
     <section class="staff-list">
       <div class="headline">
         <h2>リクエスト一覧</h2>
       </div>
       <div class="container">
         <div class="row">
-          @foreach(App\Request::All() as $staff)
+          @foreach(App\Request::All() as $request)
           <div class="col-sm-6 col-md-3">
-            {{-- <div class="thumbnail"> <img src="{{ $staff->imageUrl() }}" alt="" >
+            <div class="thumbnail"> {{-- <img src="{{ $request->imageUrl() }}" alt="" > --}}
               <div class="caption">
-                <h3>{{ $staff->getName() }}</h3>
-                <p>{!! nl2br(e(mb_strim($staff->description, 0, 80))) !!}</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a>
+                <h3>{{ $request->city }}</h3>
+                <p>申込期限: {{ $request->timeLimit() }}</p>
+                <p>{!! nl2br(e(mb_strim($request->note, 0, 80))) !!}</p>
+                <p><a href="{{ route('request.show', $request) }}" class="btn btn-primary" role="button">Button</a>
                   <!-- <a href="#" class="btn btn-default" role="button">Button</a> -->
                 </p>
               </div>
               <!-- / .caption -->
             </div>
-            <!-- / thumbnail. --> --}}
+            <!-- / thumbnail. -->
           </div>
           <!-- / .col- -->
           @endforeach
-
-
-          <div class="col-sm-6 col-md-3">
-            <div class="thumbnail"> <img src="img/thumbnail.jpg" alt="" >
-              <div class="caption">
-                <h3>人の話し、聴きすぎおっさん</h3>
-                <p>文系職種で経験豊富、新入社員の時の営業員に始まって、営業企画、物流、人事、等々の様々な職種を一部上場企業で経験。転職も59才で経験しています。</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a>
-                  <!-- <a href="#" class="btn btn-default" role="button">Button</a> -->
-                </p>
-              </div>
-              <!-- / .caption -->
-            </div>
-            <!-- / thumbnail. -->
-          </div>
-          <!-- / .col- -->
-          <div class="col-sm-6 col-md-3">
-            <div class="thumbnail"> <img src="img/thumbnail.jpg" alt="" >
-              <div class="caption">
-                <h3>人の話し、聴きすぎおっさん</h3>
-                <p>文系職種で経験豊富、新入社員の時の営業員に始まって、営業企画、物流、人事、等々の様々な職種を一部上場企業で経験。転職も59才で経験しています。</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a>
-                  <!-- <a href="#" class="btn btn-default" role="button">Button</a> -->
-                </p>
-              </div>
-              <!-- / .caption -->
-            </div>
-            <!-- / thumbnail. -->
-          </div>
-          <!-- / .col- -->
-          <div class="col-sm-6 col-md-3">
-            <div class="thumbnail"> <img src="img/thumbnail.jpg" alt="" >
-              <div class="caption">
-                <h3>人の話し、聴きすぎおっさん</h3>
-                <p>文系職種で経験豊富、新入社員の時の営業員に始まって、営業企画、物流、人事、等々の様々な職種を一部上場企業で経験。転職も59才で経験しています。</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a>
-                  <!-- <a href="#" class="btn btn-default" role="button">Button</a> -->
-                </p>
-              </div>
-              <!-- / .caption -->
-            </div>
-            <!-- / thumbnail. -->
-          </div>
-          <!-- / .col- -->
-          <div class="col-sm-6 col-md-3">
-            <div class="thumbnail"> <img src="img/thumbnail.jpg" alt="" >
-              <div class="caption">
-                <h3>人の話し、聴きすぎおっさん</h3>
-                <p>文系職種で経験豊富、新入社員の時の営業員に始まって、営業企画、物流、人事、等々の様々な職種を一部上場企業で経験。転職も59才で経験しています。</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a>
-                  <!-- <a href="#" class="btn btn-default" role="button">Button</a> -->
-                </p>
-              </div>
-              <!-- / .caption -->
-            </div>
-            <!-- / thumbnail. -->
-          </div>
-          <!-- / .col- -->
-          <div class="col-sm-6 col-md-3">
-            <div class="thumbnail"> <img src="img/thumbnail.jpg" alt="" >
-              <div class="caption">
-                <h3>人の話し、聴きすぎおっさん</h3>
-                <p>文系職種で経験豊富、新入社員の時の営業員に始まって、営業企画、物流、人事、等々の様々な職種を一部上場企業で経験。転職も59才で経験しています。</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a>
-                  <!-- <a href="#" class="btn btn-default" role="button">Button</a> -->
-                </p>
-              </div>
-              <!-- / .caption -->
-            </div>
-            <!-- / thumbnail. -->
-          </div>
-          <!-- / .col- -->
         </div>
         <!-- / .row -->
       </div>

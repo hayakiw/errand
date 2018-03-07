@@ -24,4 +24,10 @@ class Request extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function timeLimit()
+    {
+        $time = new Carbon($this->created_at);
+        return $time->addHours($this->span_time);
+    }
 }
