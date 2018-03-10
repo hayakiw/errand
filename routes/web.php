@@ -97,11 +97,13 @@ Route::group(['middleware' => ['guest:web']], function () {
 });
 
 Route::group(['middleware' => ['auth:web']], function () {
-    Route::group(['prefix' => 'my'], function () {
-        Route::get('signout', [
-            'as' => 'auth.signout',
-            'uses' => 'AuthController@signout',
-        ]);
+
+    Route::get('signout', [
+        'as' => 'auth.signout',
+        'uses' => 'AuthController@signout',
+    ]);
+
+    Route::group(['namespace' => 'my', 'prefix' => 'my'], function () {
 
         Route::post('request/pay', [
             'as' => 'request.pay',
@@ -185,10 +187,9 @@ Route::group(['middleware' => ['auth:web']], function () {
     });
 
     // ユーザープロフィール(公開)
-    Route::get('user/{user}', [
-        'as' => 'user.public',
-        'uses' => 'UserController@publicDisplay',
-    ])->where('user', '[0-9]+');
+    Route::resource('users', 'UserController', ['only' => [
+        'index', 'show',
+    ]]);
 });
 
 
